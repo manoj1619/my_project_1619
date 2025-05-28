@@ -4,7 +4,7 @@ echo -e "\033[1;34mSetting up Git Hooks & Installing Dependencies...\033[0m"
 
 # Set custom hook directory
 echo -e "\033[1;34mConfiguring Git to use custom hooks directory (.githooks/)...\033[0m"
-git config core.hooksPath .git/hooks
+git config core.hooksPath .githooks
 
 # Tools to check and install
 TOOLS=(
