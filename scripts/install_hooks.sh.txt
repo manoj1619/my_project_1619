@@ -1,25 +1,46 @@
 #!/bin/bash
 
-echo "Setting up Git Hooks & Installing Dependencies..."
+echo -e "\033[1;34mSetting up Git Hooks & Installing Dependencies...\033[0m"
 
 # Set custom hook directory
-echo "Configuring Git to use custom hooks directory (.githooks/)..."
-git config core.hooksPath .githooks/pre-commit
+echo -e "\033[1;34mConfiguring Git to use custom hooks directory (.githooks/)...\033[0m"
+git config core.hooksPath .git/hooks
 
-# Ensure required tools are installed
+# Tools to check and install
+TOOLS=(
+    clang-format
+    clang-tidy
+    cppcheck
+    shellcheck
+    hadolint
+    cmake-format
+    pre-commit
+)
+
+# Track missing tools
 MISSING_TOOLS=()
-for TOOL in clang-format clang-tidy cppcheck pre-commit; do
-    if ! command -v $TOOL &> /dev/null; then
-        MISSING_TOOLS+=($TOOL)
+for TOOL in "${TOOLS[@]}"; do
+    if ! command -v "$TOOL" &> /dev/null; then
+        MISSING_TOOLS+=("$TOOL")
     fi
 done
 
+# Install missing system tools
 if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
-    echo " Missing tools detected: ${MISSING_TOOLS[*]}"
-    echo "Installing missing tools: ${MISSING_TOOLS[*]}..."
-    sudo apt-get update && sudo apt-get install -y ${MISSING_TOOLS[*]}
+    echo -e "\033[1;33mMissing tools detected: ${MISSING_TOOLS[*]}\033[0m"
+    echo -e "\033[1;34mInstalling missing tools...\033[0m"
+    sudo apt-get update && sudo apt-get install -y "${MISSING_TOOLS[@]}"
 else
-    echo "All required tools are already installed."
+    echo -e "\033[1;32mAll required tools are already installed.\033[0m"
 fi
 
-echo "Setup complete! Pre-commit hooks will now run automatically when committing code."
+# Ensure Python tools are installed (in case cmake-format or others are pip-only)
+echo -e "\033[1;34mInstalling/updating Python-based tools...\033[0m"
+pip install --upgrade cmakelang pre-commit
+
+# Install pre-commit hooks
+echo -e "\033[1;34mInstalling pre-commit hooks...\033[0m"
+pre-commit install
+
+echo -e "\033[1;32mSetup complete! Git hooks are now active.\033[0m"
+
