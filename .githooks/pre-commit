@@ -1,0 +1,51 @@
+#!/bin/bash
+
+echo "Running Pre-Commit Hook for C Coding Standards.."
+
+# Get the current branch
+BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
+
+# Define protected branches
+PROTECTED_BRANCHES=("main" "feature-test-precommit" "feature-test-precommit2")
+
+# Check if the commit is to a protected branch
+if [[ " ${PROTECTED_BRANCHES[@]} " =~ " ${BRANCH_NAME} " ]]; then
+    echo "Committing to '${BRANCH_NAME}', running checks..."
+
+    # Ensure tools are installed
+    MISSING_TOOLS=()
+    for TOOL in clang-format clang-tidy cppcheck; do
+        if ! command -v $TOOL &> /dev/null; then
+            MISSING_TOOLS+=($TOOL)
+        fi
+    done
+
+    if [ ${#MISSING_TOOLS[@]} -ne 0 ]; then
+        echo "Missing tools: ${MISSING_TOOLS[*]}. Installing..."
+        sudo apt-get install -y ${MISSING_TOOLS[*]}
+    fi
+
+    # Run Clang-Format on staged files
+    git diff --cached --name-only --diff-filter=ACM | grep -E "\.(c|h)$" | xargs clang-format -i
+
+    # Run Clang-Tidy
+    git diff --cached --name-only --diff-filter=ACM | grep -E "\.(c|h)$" | xargs clang-tidy --quiet --fix-errors
+
+    # Run Cppcheck
+    git diff --cached --name-only --diff-filter=ACM | grep -E "\.(c|h)$" | xargs cppcheck --enable=all --quiet
+
+    # Run Python script for naming conventions
+    python3 c_coding_standards.py $(git diff --cached --name-only --diff-filter=ACM | grep -E "\.(c|h)$")
+
+    # If any checks fail, prevent the commit
+    if [ $? -ne 0 ]; then
+        echo "Coding standards violations detected! Fix the issues before committing."
+        exit 1
+    fi
+
+    echo "All coding standard checks passed!"
+else
+    echo "Skipping checks for branch '${BRANCH_NAME}'."
+fi
+
+exit 0

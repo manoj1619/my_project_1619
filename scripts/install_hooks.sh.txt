@@ -4,7 +4,7 @@ echo "Setting up Git Hooks & Installing Dependencies..."
 
 # Set custom hook directory
 echo "Configuring Git to use custom hooks directory (.githooks/)..."
-git config core.hooksPath .githooks/
+git config core.hooksPath .githooks/pre-commit
 
 # Ensure required tools are installed
 MISSING_TOOLS=()
