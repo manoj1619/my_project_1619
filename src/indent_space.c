@@ -1,7 +1,12 @@
-// ❌ BAD: inconsistent indentation and spacing
-int sum(int a, int b) { return a + b; }
+#include <stdio.h>
 
-// ✅ GOOD:
+int main() {
+  int x = 10;
+  int y = 20;
+  if (x == y) {    // Missing spaces around 'if', '==', and inside brackets
+    int z = x + y; // Missing spaces around '=' and '+'
+    printf("Sum: %d\n", z);
+  }
 
-
-int sum(int a, int b) { return a + b; }
+  return 0;
+}

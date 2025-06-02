@@ -13,28 +13,6 @@ def check_naming_convention(filename):
     for i, line in enumerate(lines, 1):
         line_strip = line.strip()
 
-        # === ADDED: Indentation and spacing checks ===
-        if "\t" in line:
-            errors.append(f"Line {i}: Tabs are not allowed. Use 4 spaces for indentation.")
-
-        leading_spaces = len(line) - len(line.lstrip(" "))
-        if line_strip and not line_strip.startswith("//") and leading_spaces % 4 != 0:
-            errors.append(f"Line {i}: Indentation should be a multiple of 4 spaces.")
-
-        # Spacing around binary operators (=, +, -, *, /, ==, !=, <=, >=)
-        operators = ["=", r"\+", "-", r"\*", "/", "==", "!=", "<=", ">=", "<", ">"]
-        for op in operators:
-            if re.search(rf"\w{op}\w", line):
-                errors.append(f"Line {i}: Missing space around operator '{op}'.")
-
-        # Space after keywords like if, for, while, switch
-        keywords = ["if", "for", "while", "switch"]
-        for keyword in keywords:
-            if re.search(rf"\b{keyword}\(", line):
-                errors.append(f"Line {i}: Add a space between keyword '{keyword}' and '('.")
-
-        # === END: Indentation and spacing checks ===
-
         # Track last Doxygen-style comment block
         if line_strip.startswith("/**") or line_strip.startswith("///"):
             last_comment_block = [line_strip]
@@ -46,6 +24,7 @@ def check_naming_convention(filename):
             last_comment_block.append(line_strip)
             continue
 
+        # Skip empty or comment-only lines
         if not line_strip or line_strip.startswith("//") or line_strip.startswith("/*"):
             continue
 
@@ -84,6 +63,7 @@ def check_naming_convention(filename):
             if not re.fullmatch(r"[a-z_][a-z0-9_]*", func_name):
                 errors.append(f"Line {i}: Function '{func_name}' should be in snake_case.")
 
+            # Check for Doxygen comment block above function
             if not any(tag in ''.join(last_comment_block) for tag in ["@brief", "@param", "@return"]):
                 errors.append(f"Line {i}: Function '{func_name}' is missing proper Doxygen comment with @brief, @param(s), and @return.")
             last_comment_block = []
@@ -115,3 +95,4 @@ if __name__ == "__main__":
     else:
         print("C Naming Conventions Passed.")
 
+is this code identifying indentation space error
