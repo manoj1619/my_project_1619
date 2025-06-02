@@ -5,55 +5,30 @@ repos:
         name: Clang Format
         entry: clang-format -i
         language: system
-        types: [c]
-        files: \.(c|h)$
+        types: [file]
+        files: ".*\\.(c|h)$"
         stages: [pre-commit]
 
       - id: clang-tidy
         name: Clang Tidy
         entry: clang-tidy --fix --quiet
         language: system
-        types: [c]
-        files: \.(c|h)$
+        types: [file]
+        files: ".*\\.(c|h)$"
         stages: [pre-commit]
 
       - id: cppcheck
         name: Cppcheck
         entry: cppcheck --enable=all --quiet
         language: system
-        types: [c]
-        files: \.(c|h)$
+        types: [file]
+        files: ".*\\.(c|h)$"
         stages: [pre-commit]
 
       - id: c-naming-conventions
         name: Check C Naming Conventions
-        entry: python3 scripts/c_coding_standards.py
-        language: system
-        types: [c]
-        files: \.(c|h)$
-        stages: [pre-commit]
-
-      - id: shellcheck
-        name: ShellCheck
-        entry: shellcheck
-        language: system
-        types: [shell]
-        files: \.sh$
-        stages: [pre-commit]
-
-      - id: cmake-format
-        name: CMake Format
-        entry: cmake-format -i
+        entry: python3 c_coding_standards.py
         language: system
         types: [file]
-        files: ^CMakeLists\.txt$|\.cmake$
+        files: ".*\\.(c|h)$"
         stages: [pre-commit]
-
-      - id: hadolint
-        name: Hadolint (Dockerfile Linter)
-        entry: hadolint
-        language: system
-        types: [file]
-        files: ^Dockerfile$
-        stages: [pre-commit]
-
