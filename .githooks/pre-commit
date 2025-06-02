@@ -60,7 +60,7 @@ if [[ " ${PROTECTED_BRANCHES[*]} " =~ " ${BRANCH_NAME} " ]]; then
     if [ -f "$PYTHON_SCRIPT" ]; then
         python3 "$PYTHON_SCRIPT" $STAGED_C_FILES
         if [ $? -ne 0 ]; then
-            echo "Python coding standards script failed."
+            echo "Python c_coding standards script failed."
             exit 1
         fi
     else
