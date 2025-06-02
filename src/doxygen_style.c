@@ -1,3 +1,8 @@
+// ❌ BAD: missing Doxygen comment
+int calculate_sum(int a, int b) {
+    return a + b;
+}
+
 // ✅ GOOD:
 /**
  * @brief Calculates sum of two integers.
@@ -5,4 +10,7 @@
  * @param b Second integer operand.
  * @return Sum of a and b.
  */
-int calculate_sum(int a, int b) { return a + b; }
+int calculate_sum(int a, int b) {
+    return a + b;
+}
+
