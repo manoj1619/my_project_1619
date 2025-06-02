@@ -1,0 +1,30 @@
+BasedOnStyle: LLVM
+
+IndentWidth: 4            # Use 4 spaces for indentation
+UseTab: Never             # Use spaces instead of tabs
+
+ColumnLimit: 120          # Optional: Max line length
+
+SpacesBeforeTrailingComments: 1
+SpaceBeforeParens: ControlStatements   # if/while/for (x)
+
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Empty
+
+BreakBeforeBraces: Allman             # Each brace on its own line
+
+SpaceInEmptyParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceAfterCStyleCast: true
+SpaceAfterLogicalNot: false
+
+PointerAlignment: Left                # `int* ptr` not `int *ptr`
+
+# Optional: Ensure space around binary operators
+SpacesInAngles: false
+SpaceBeforeAssignmentOperators: true
+AlignConsecutiveAssignments: true
+AlignConsecutiveDeclarations: true
+
