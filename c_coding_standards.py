@@ -1,50 +1,6 @@
 #!/usr/bin/env python3
 import re
 import sys
-import os
-
-FLAG_FILE = ".indent_fix_done"
-
-def fix_indentation(filename):
-    """Fix indentation by converting tabs to 4 spaces and rounding leading spaces to multiples of 4."""
-    with open(filename, "r") as f:
-        lines = f.readlines()
-
-    fixed_lines = []
-    for line in lines:
-        # Replace tabs with 4 spaces
-        line = line.replace("\t", " " * 4)
-        # Count leading spaces
-        stripped = line.lstrip(" ")
-        lead_spaces = len(line) - len(stripped)
-        # Round down to nearest multiple of 4
-        fixed_lead = lead_spaces - (lead_spaces % 4)
-        fixed_line = " " * fixed_lead + stripped
-        fixed_lines.append(fixed_line)
-
-    with open(filename, "w") as f:
-        f.writelines(fixed_lines)
-
-def fix_indentation(filename):
-    with open(filename, 'r') as f:
-        lines = f.readlines()
-
-    fixed_lines = []
-    for line in lines:
-        # Your indentation fixing logic here, e.g., replace tabs with 4 spaces, adjust spaces
-        fixed_line = fix_line_indentation(line)  # implement this
-        fixed_lines.append(fixed_line)
-
-    with open(filename, 'w') as f:
-        f.writelines(fixed_lines)
-
-    # Stage the file after fix:
-    import subprocess
-    subprocess.run(['git', 'add', filename])
-
-    print(f"Fixing indentation issues in {filename} ...")
-    print("Indentation fixed and staged. Please commit again.")
-
 
 def check_naming_convention(filename):
     with open(filename, "r") as file:
@@ -56,15 +12,6 @@ def check_naming_convention(filename):
 
     for i, line in enumerate(lines, 1):
         line_strip = line.strip()
-
-        # === VSCode-style indentation check (4 spaces only, no tabs) ===
-        if "\t" in line:
-            errors.append(f"Line {i}: Tabs are not allowed. Use spaces for indentation (VSCode default).")
-
-        leading_spaces = len(line) - len(line.lstrip(" "))
-        if line_strip and not line_strip.startswith("//") and not line_strip.startswith("/*"):
-            if leading_spaces % 4 != 0:
-                errors.append(f"Line {i}: Indentation should be a multiple of 4 spaces (found {leading_spaces}).")
 
         # Track last Doxygen-style comment block
         if line_strip.startswith("/**") or line_strip.startswith("///"):
@@ -133,42 +80,17 @@ def check_naming_convention(filename):
 
     return errors
 
-
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python c_coding_standards.py <C_FILE>")
         sys.exit(1)
 
     filename = sys.argv[1]
-
-    if os.path.exists(FLAG_FILE):
-        # On next commit, fix indentation and remove flag
-        print(f"Fixing indentation issues in {filename} ...")
-        fix_indentation(filename)
-        os.remove(FLAG_FILE)
-        print("Indentation fixed. Please commit again.")
-        sys.exit(1)
-
     errors = check_naming_convention(filename)
 
-    # Filter only indentation/tab errors for initial flag trigger
-    indent_errors = [e for e in errors if "Indentation" in e or "Tabs" in e]
-
-    if indent_errors:
-        print("Indentation errors detected:")
-        for e in indent_errors:
-            print(e)
-        # Create flag file to fix indentation next time
-        with open(FLAG_FILE, "w") as f:
-            f.write("fix pending\n")
-        print("\nRun commit again to auto-fix indentation errors.")
-        sys.exit(1)
-
-    # If no indentation errors, print all errors (non-indentation)
     if errors:
-        for e in errors:
-            print(e)
+        for error in errors:
+            print(error)
         sys.exit(1)
-
-    print("C Naming Conventions Passed.")
-
+    else:
+        print("C Naming Conventions Passed.")
