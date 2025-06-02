@@ -8,9 +8,7 @@
  * @param b Second integer
  * @return Sum of a and b
  */
-int add(int a, int b) {
-    return a + b;
-}
+int add(int a, int b) { return a + b; }
 
 /**
  * @brief Main program entry point.
@@ -18,13 +16,17 @@ int add(int a, int b) {
  * @return int Returns the sum of two integers.
  */
 int main() {
-    int x = 10;
-    int y = 20;
+  int x;
+  int y = 20;
 
-    if (x != 5) {  // Changed condition to avoid always true warning
-        printf("X is not 5\n");
-    }
+  printf("Enter a value for x: ");
+  scanf("%d", &x);
 
-    return add(x, y);
+  if (x > 5) {
+    printf("X is greater than 5\n");
+  } else {
+    printf("X is not greater than 5\n");
+  }
+
+  return add(x, y);
 }
-
