@@ -25,6 +25,26 @@ def fix_indentation(filename):
     with open(filename, "w") as f:
         f.writelines(fixed_lines)
 
+def fix_indentation(filename):
+    with open(filename, 'r') as f:
+        lines = f.readlines()
+
+    fixed_lines = []
+    for line in lines:
+        # Your indentation fixing logic here, e.g., replace tabs with 4 spaces, adjust spaces
+        fixed_line = fix_line_indentation(line)  # implement this
+        fixed_lines.append(fixed_line)
+
+    with open(filename, 'w') as f:
+        f.writelines(fixed_lines)
+
+    # Stage the file after fix:
+    import subprocess
+    subprocess.run(['git', 'add', filename])
+
+    print(f"Fixing indentation issues in {filename} ...")
+    print("Indentation fixed and staged. Please commit again.")
+
 
 def check_naming_convention(filename):
     with open(filename, "r") as file:
