@@ -13,6 +13,15 @@ def check_naming_convention(filename):
     for i, line in enumerate(lines, 1):
         line_strip = line.strip()
 
+        # === VSCode-style indentation check (4 spaces only, no tabs) ===
+        if "\t" in line:
+            errors.append(f"Line {i}: Tabs are not allowed. Use spaces for indentation (VSCode default).")
+
+        leading_spaces = len(line) - len(line.lstrip(" "))
+        if line_strip and not line_strip.startswith("//") and not line_strip.startswith("/*"):
+            if leading_spaces % 4 != 0:
+                errors.append(f"Line {i}: Indentation should be a multiple of 4 spaces (found {leading_spaces}).")
+
         # Track last Doxygen-style comment block
         if line_strip.startswith("/**") or line_strip.startswith("///"):
             last_comment_block = [line_strip]
@@ -95,4 +104,3 @@ if __name__ == "__main__":
     else:
         print("C Naming Conventions Passed.")
 
-is this code identifying indentation space error
