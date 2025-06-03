@@ -1,0 +1,44 @@
+repos:
+  - repo: local
+    hooks:
+      - id: clang-format
+        name: Clang Format Check
+        entry: bash clang_format_check.sh
+        language: system
+        types: [file]
+        files: ".*\\.(c|h)$"
+        stages: [pre-commit]
+
+      - id: clang-tidy
+        name: Clang Tidy
+        entry: clang-tidy -extra-arg=-std=c99
+        language: system
+        types: [file]
+        files: ".*\\.(c|h)$"
+        stages: [pre-commit]
+
+      - id: cppcheck
+        name: Cppcheck Full Static Analysis
+        entry: >
+          cppcheck
+          --enable=all
+          --inconclusive
+          --std=c99
+          --force
+          --quiet
+          --check-config
+          --suppress=missingIncludeSystem
+          -Isrc -Iinclude
+        language: system
+        types: [file]
+        files: ".*\\.(c|h)$"
+        stages: [pre-commit]
+
+      - id: c-naming-conventions
+        name: Check C Naming Conventions
+        entry: python3 c_coding_standards.py
+        language: system
+        types: [file]
+        files: ".*\\.(c|h)$"
+        stages: [pre-commit]
+
