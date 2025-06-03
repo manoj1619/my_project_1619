@@ -2,7 +2,7 @@ repos:
   - repo: local
     hooks:
       - id: clang-format
-        name: Clang Format
+        name: Clang Format Check
         entry: bash clang_format_check.sh
         language: system
         types: [file]
@@ -11,15 +11,24 @@ repos:
 
       - id: clang-tidy
         name: Clang Tidy
-        entry: clang-tidy --fix --quiet
+        entry: clang-tidy --fix --quiet -p build
         language: system
         types: [file]
         files: ".*\\.(c|h)$"
         stages: [pre-commit]
 
       - id: cppcheck
-        name: Cppcheck
-        entry: cppcheck --enable=all --quiet
+        name: Cppcheck Full Static Analysis
+        entry: >
+          cppcheck
+          --enable=all
+          --inconclusive
+          --std=c99
+          --force
+          --quiet
+          --check-config
+          --suppress=missingIncludeSystem
+          -Isrc -Iinclude
         language: system
         types: [file]
         files: ".*\\.(c|h)$"
@@ -32,3 +41,4 @@ repos:
         types: [file]
         files: ".*\\.(c|h)$"
         stages: [pre-commit]
+
