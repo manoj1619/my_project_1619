@@ -6,7 +6,7 @@ echo "Running Pre-Commit Hook for C Coding Standards..."
 BRANCH_NAME=$(git rev-parse --abbrev-ref HEAD)
 
 # Protected branches to enforce checks
-PROTECTED_BRANCHES=("main" "master" "feature-test-precommit" "feature-test-precommit2")
+PROTECTED_BRANCHES=("main" "master""rough" "feature-test-precommit" "feature-test-precommit2")
 
 # Run only on protected branches
 if [[ " ${PROTECTED_BRANCHES[*]} " =~ " ${BRANCH_NAME} " ]]; then
