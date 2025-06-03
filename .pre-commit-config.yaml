@@ -7,7 +7,7 @@ repos:
         language: system
         types: [file]
         files: ".*\\.(c|h)$"
-        stages: [commit]
+        stages: [pre-commit]
 
       - id: clang-tidy
         name: Clang Tidy
@@ -15,7 +15,7 @@ repos:
         language: system
         types: [file]
         files: ".*\\.(c|h)$"
-        stages: [commit]
+        stages: [pre-commit]
 
       - id: cppcheck
         name: Cppcheck Full Static Analysis
@@ -32,7 +32,7 @@ repos:
         language: system
         types: [file]
         files: ".*\\.(c|h)$"
-        stages: [commit]
+        stages: [pre-commit]
 
       - id: c-naming-conventions
         name: Check C Naming Conventions
@@ -40,5 +40,5 @@ repos:
         language: system
         types: [file]
         files: ".*\\.(c|h)$"
-        stages: [commit]
+        stages: [pre-commit]
 
