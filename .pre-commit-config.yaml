@@ -11,7 +11,7 @@ repos:
 
       - id: clang-tidy
         name: Clang Tidy
-        entry: clang-tidy --fix --quiet -p build
+        entry: clang-tidy -extra-arg=-std=c99
         language: system
         types: [file]
         files: ".*\\.(c|h)$"
